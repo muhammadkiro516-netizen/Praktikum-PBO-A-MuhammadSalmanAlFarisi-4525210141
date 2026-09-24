@@ -1,4 +1,4 @@
-# Tugas Pertemuan 3 - Pewarisan
+# Tugas Pertemuan 3 - Pewarisan (Inheritance)
 
 ## Identitas Mahasiswa
 
@@ -9,26 +9,45 @@
 | Mata Kuliah | Pemrograman Berorientasi Objek A |
 | Pertemuan | 3 - Pewarisan (Inheritance) |
 
-## Deskripsi Tugas
+## Foto Mahasiswa
 
-Program ini mengimplementasikan hierarki penggajian universitas menggunakan konsep pewarisan pada Java dan PHP. Program memiliki satu kelas induk abstrak dan empat jenis pegawai konkret:
+Foto belum disertakan karena belum ada file foto yang tersedia di folder tugas.
+Simpan foto dengan nama `foto-muhammad-salman-al-farisi.jpg` di folder
+`Pewarisan/foto/`, lalu tambahkan gambar dengan format berikut:
+
+```markdown
+![Foto Muhammad Salman Al Farisi](foto/foto-muhammad-salman-al-farisi.jpg)
+```
+
+## Gambaran Program
+
+Program ini dibuat untuk mensimulasikan perhitungan gaji beberapa jenis pegawai
+di lingkungan universitas. Data pegawai yang sama ditempatkan pada kelas induk
+`Pegawai`, kemudian aturan gaji yang berbeda diletakkan pada kelas turunannya.
+Dengan cara ini, setiap kelas tidak perlu menyimpan ulang data NIP, nama, dan
+gaji pokok.
+
+Implementasinya dibuat dalam dua bahasa, yaitu Java dan PHP. Keduanya memakai
+struktur dan contoh data yang sama supaya hasilnya dapat dibandingkan dengan
+mudah. Jenis pegawai yang digunakan adalah:
 
 - `PegawaiTetap`
 - `PegawaiKontrak`
 - `Dosen`
 - `PegawaiHarian`
 
-Setiap jenis pegawai mempunyai cara perhitungan gaji yang sesuai dengan karakteristiknya. Kelas induk menyimpan data yang sama, yaitu NIP, nama, dan gaji pokok.
+Setiap jenis pegawai mempunyai aturan penggajian sendiri, tetapi semuanya tetap
+dapat diproses melalui tipe `Pegawai`.
 
-## Konsep yang Diimplementasikan
+## Konsep yang Dipakai
 
 - Kelas abstrak `Pegawai` sebagai parent class.
 - Pewarisan menggunakan `extends` pada Java dan PHP.
-- Pemanggilan constructor induk menggunakan `super(...)` dan `parent::__construct(...)`.
-- Method overriding pada `hitungGaji()`.
-- Pemanggilan method induk menggunakan `super.hitungGaji()` dan `parent::hitungGaji()`.
-- Modifier `protected`, `private`, dan `public`.
-- Validasi nilai gaji, masa kerja, hari kerja, tunjangan, dan durasi kontrak.
+- Constructor turunan tetap memanggil constructor induk.
+- Overriding pada method `hitungGaji()`.
+- Pemakaian `super.hitungGaji()` di Java dan `parent::hitungGaji()` di PHP.
+- Penggunaan modifier `protected`, `private`, dan `public`.
+- Validasi agar nilai gaji dan data pendukung tidak negatif.
 - Komposisi antara `Pegawai` dan `ProfilPembayaran`.
 
 ## Struktur Folder
@@ -61,7 +80,9 @@ Pewarisan/
 | Dosen | Gaji pegawai tetap + tunjangan fungsional |
 | Pegawai Harian | Tarif per hari x jumlah hari kerja |
 
-Contoh data pada program menghasilkan total beban gaji sebesar **Rp28.200.000,00**. Gaji Ani sebagai pegawai tetap adalah **Rp7.800.000,00** karena masa kerja 15 tahun menghasilkan tunjangan 30%.
+Dengan data contoh yang tersedia, total beban gaji adalah
+**Rp28.200.000,00**. Gaji Ani menjadi **Rp7.800.000,00** karena masa kerjanya
+15 tahun memberikan tunjangan sebesar 30% dari gaji pokok.
 
 ## Cara Menjalankan Java
 
@@ -94,11 +115,15 @@ php main.php
   Total beban gaji: Rp28.200.000,00
 ```
 
-## Diagram dan Justifikasi
+## Dokumen Pendukung
 
 - Diagram kelas PlantUML tersedia di [diagram.puml](diagram.puml).
 - Justifikasi hubungan pewarisan dan komposisi tersedia di [justifikasi.md](justifikasi.md).
 - Catatan alasan `PegawaiKontrak` tidak melakukan overriding tersedia di [catatan.md](catatan.md).
+
+Dokumen-dokumen tersebut disertakan agar alasan pemilihan pewarisan dan
+komposisi dapat dilihat bersama dengan source code, bukan hanya dari hasil
+output program.
 
 ## Status Pengerjaan
 
