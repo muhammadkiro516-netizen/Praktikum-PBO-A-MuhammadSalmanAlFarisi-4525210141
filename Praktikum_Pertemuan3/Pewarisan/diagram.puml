@@ -1,0 +1,41 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+abstract class Pegawai {
+  # nip: String
+  # nama: String
+  # gajiPokok: double
+  + hitungGaji(): double
+  + jenis(): String
+}
+
+class PegawaiTetap {
+  - masaKerjaTahun: int
+  + hitungGaji(): double
+}
+
+class PegawaiKontrak {
+  - bulanKontrak: int
+}
+
+class Dosen {
+  - tunjanganFungsional: double
+  + hitungGaji(): double
+}
+
+class PegawaiHarian {
+  - jumlahHariKerja: int
+  + hitungGaji(): double
+}
+
+class ProfilPembayaran {
+  + bank: String
+  + nomorRekening: String
+}
+
+Pegawai <|-- PegawaiTetap
+Pegawai <|-- PegawaiKontrak
+PegawaiTetap <|-- Dosen
+Pegawai <|-- PegawaiHarian
+Pegawai *-- ProfilPembayaran : memiliki
+@enduml
