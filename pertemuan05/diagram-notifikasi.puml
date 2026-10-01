@@ -1,0 +1,38 @@
+@startuml
+title Hierarki Notifikasi (PHP)
+skinparam classAttributeIconSize 0
+
+abstract class Notifikasi {
+  # tujuan : string {readonly}
+  + {abstract} kirim(pesan : string) : void
+  + saluran() : string
+}
+
+class Email {
+  + kirim(pesan : string) : void
+}
+class SMS {
+  + kirim(pesan : string) : void
+}
+class WhatsApp {
+  + kirim(pesan : string) : void
+}
+class Telegram {
+  + kirim(pesan : string) : void
+}
+
+Notifikasi <|-- Email
+Notifikasi <|-- SMS
+Notifikasi <|-- WhatsApp
+Notifikasi <|-- Telegram
+
+class KirimSemua <<function>> {
+  + kirimSemua(daftar : array, pesan : string) : void
+}
+KirimSemua ..> Notifikasi : hanya memanggil kirim()
+
+note right of Telegram
+  Ditambahkan belakangan tanpa
+  menyunting kirimSemua().
+end note
+@enduml
