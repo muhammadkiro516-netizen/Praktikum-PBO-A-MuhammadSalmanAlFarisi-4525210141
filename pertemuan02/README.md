@@ -53,7 +53,7 @@ Dua data tidak sah ditolak dengan pesan yang menyebut apa yang salah (nilai tuga
 ![Mahasiswa.php (bagian 2 dari 2)](IMG/Mahasiswa-php-2.png)
 
 ## Hasil Running Program php
-![Hasil running PHP](IMG/hasil-running-php.png)
+![Hasil running PHP](IMG/running_php.png)
 
 > Screenshot ini masih berupa placeholder. Jalankan `php main.php` pada folder `php/`, lalu timpa file `IMG/hasil-running-php.png` dengan screenshot terminalnya.
 

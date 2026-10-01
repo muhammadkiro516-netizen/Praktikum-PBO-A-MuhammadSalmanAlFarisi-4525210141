@@ -79,7 +79,7 @@ Bagian "Komposisi: profil pembayaran" memperlihatkan bahwa profil pembayaran Ani
 ![Pegawai.php (bagian 4 dari 4)](IMG/Pegawai-php-4.png)
 
 ## Hasil Running Program php
-![Hasil running PHP](IMG/hasil-running-php.png)
+![Hasil running PHP](IMG/4RunningPHP.png)
 
 > Screenshot ini masih berupa placeholder. Jalankan `php main.php` pada folder `php/`, lalu timpa file `IMG/hasil-running-php.png` dengan screenshot terminalnya.
 
