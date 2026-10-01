@@ -1,0 +1,61 @@
+@startuml
+title Hierarki Penggajian Pegawai
+skinparam classAttributeIconSize 0
+
+abstract class Pegawai {
+  # nip : String
+  # nama : String
+  # gajiPokok : double
+  - profilPembayaran : ProfilPembayaran
+  + hitungGaji() : double
+  + {abstract} jenis() : String
+  + getNip() : String
+  + getNama() : String
+  + getProfilPembayaran() : ProfilPembayaran
+  + setProfilPembayaran(baru : ProfilPembayaran) : void
+}
+
+class PegawaiTetap {
+  # {static} TUNJANGAN_PER_TAHUN : double = 0.02
+  # {static} TUNJANGAN_MAKSIMUM : double = 0.40
+  - masaKerjaTahun : int
+  + hitungGaji() : double
+  + jenis() : String
+}
+
+class PegawaiKontrak {
+  - bulanKontrak : int
+  + jenis() : String
+  + getBulanKontrak() : int
+}
+
+class Dosen {
+  - tunjanganFungsional : double
+  + hitungGaji() : double
+  + jenis() : String
+}
+
+class PegawaiHarian {
+  - jumlahHariKerja : int
+  + hitungGaji() : double
+  + jenis() : String
+}
+
+final class ProfilPembayaran {
+  - bank : String
+  - nomorRekening : String
+  + getBank() : String
+  + getNomorRekening() : String
+}
+
+Pegawai <|-- PegawaiTetap
+Pegawai <|-- PegawaiKontrak
+PegawaiTetap <|-- Dosen
+Pegawai <|-- PegawaiHarian
+Pegawai "1" *-- "1" ProfilPembayaran : memiliki >
+
+note right of PegawaiKontrak
+  Tidak meng-override hitungGaji():
+  memakai gaji pokok dari Pegawai.
+end note
+@enduml

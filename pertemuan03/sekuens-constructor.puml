@@ -1,0 +1,27 @@
+@startuml
+title Sequence Diagram: new RekeningBank("222", "Budi") dengan delegasi constructor
+
+actor Main
+participant "RekeningBank\n(String, String)" as Ringkas
+participant "RekeningBank\n(String, String, double)" as Lengkap
+
+Main -> Ringkas : new RekeningBank("222", "Budi")
+activate Ringkas
+note right of Ringkas : Constructor ringkas dipanggil oleh Main
+
+Ringkas -> Lengkap : this("222", "Budi", 0)
+activate Lengkap
+note right of Lengkap : Delegasi ke constructor lengkap\n(this(...) adalah pernyataan pertama)
+
+Lengkap -> Lengkap : tolak jika nomor null / kosong
+Lengkap -> Lengkap : tolak jika saldoAwal < 0
+Lengkap -> Lengkap : this.nomor = "222"\nthis.pemilik = "Budi"\nthis.saldo = 0
+Lengkap -> Lengkap : jumlahRekening++ (static)
+note right of Lengkap : Penghitung naik di sini saja,\nsehingga satu objek dihitung satu kali
+
+Lengkap --> Ringkas : selesai
+deactivate Lengkap
+
+Ringkas --> Main : referensi objek RekeningBank
+deactivate Ringkas
+@enduml
