@@ -1,0 +1,104 @@
+@startuml
+title Abstraksi Kendaraan: abstract class, interface, enum, dan trait
+skinparam classAttributeIconSize 0
+
+' ---------- Kontrak (interface) ----------
+interface Movable <<interface>> {
+  + bergerak() : void
+  + kecepatanMaksimum() : double
+  + ringkasanGerak() : String
+}
+
+interface Fuelable <<interface>> {
+  + isiBahanBakar(jumlah : double) : void
+  + kapasitasTangki() : double
+  + tipeBahanBakar() : TipeBahanBakar
+}
+
+' ---------- Identitas (abstract class) ----------
+abstract class Kendaraan {
+  # merek : String
+  # tahun : int
+  # Kendaraan(merek : String, tahun : int)
+  + umur(tahunSekarang : int) : int
+  + {abstract} jumlahRoda() : int
+  + toString() : String
+}
+
+class Mobil {
+  - kapasitasTangki : double
+  - isiTangki : double
+  + jumlahRoda() : int
+  + bergerak() : void
+  + kecepatanMaksimum() : double
+  + isiBahanBakar(jumlah : double) : void
+  + kapasitasTangki() : double
+  + tipeBahanBakar() : TipeBahanBakar
+}
+
+class Sepeda {
+  + jumlahRoda() : int
+  + bergerak() : void
+  + kecepatanMaksimum() : double
+  + ringkasanGerak() : String
+}
+
+class Genset {
+  - kapasitasTangki : double
+  - isiTangki : double
+  + isiBahanBakar(jumlah : double) : void
+  + kapasitasTangki() : double
+  + tipeBahanBakar() : TipeBahanBakar
+}
+
+' ---------- Enum ----------
+enum TipeBahanBakar <<enumeration>> {
+  BENSIN
+  SOLAR
+  LISTRIK
+  - label : String
+  - hargaPerSatuan : double
+  + getLabel() : String
+  + biayaPengisian(jumlah : double) : double
+  + ramahLingkungan() : boolean
+}
+
+' ---------- Trait (khusus PHP) ----------
+class Loggable <<trait>> {
+  + log(pesan : string) : void
+}
+
+class Pesanan {
+}
+
+' ---------- Pewarisan: garis PENUH, kepala segitiga kosong ----------
+Kendaraan <|-- Mobil
+Kendaraan <|-- Sepeda
+
+' ---------- Realisasi interface: garis PUTUS, kepala segitiga kosong ----------
+Movable  <|.. Mobil
+Fuelable <|.. Mobil
+Movable  <|.. Sepeda
+Fuelable <|.. Genset
+
+' ---------- Ketergantungan dan penggunaan trait ----------
+Fuelable ..> TipeBahanBakar : mengembalikan
+Mobil    ..> Loggable : <<use>>
+Pesanan  ..> Loggable : <<use>>
+
+note right of Sepeda
+  Sepeda TIDAK merealisasikan Fuelable.
+  isiPenuh(sepeda) ditolak saat kompilasi.
+end note
+
+note bottom of Genset
+  Genset butuh bahan bakar tetapi tidak bergerak:
+  cukup Fuelable, tanpa Kendaraan dan tanpa Movable.
+end note
+
+note bottom of Loggable
+  Trait: penggunaan ulang horizontal.
+  Mobil dan Pesanan tidak sekerabat,
+  tetapi sama-sama bisa memanggil log().
+end note
+@enduml
