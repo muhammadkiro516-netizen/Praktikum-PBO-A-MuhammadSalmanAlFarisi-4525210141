@@ -57,4 +57,5 @@ Modul meminta riwayat commit yang menunjukkan proses, bukan satu commit di akhir
 | 5 | Tambah latihan Peminjamable dan StatusPinjam | `latihan/` |
 | 6 | Tambah class diagram abstraksi | `uml/` |
 | 7 | Tambah keputusan, percobaan mandiri, dan tugas rumah | `keputusan.md`, `percobaan/`, `percobaan-mandiri.md`, `refleksi.md`, `persiapan-sesi07.md` |
-| 8 | Tambah laporan pertemuan 6 dan perbarui README utama | `README.md` (dua berkas) |
+| 8 | Tambah screenshot coding dan hasil running pertemuan 6 | `IMG/` |
+| 9 | Tambah laporan pertemuan 6 dan perbarui README utama | `README.md` (dua berkas) |

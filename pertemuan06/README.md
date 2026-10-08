@@ -88,11 +88,26 @@ Berkas: [java/Movable.java](java/Movable.java), [java/Fuelable.java](java/Fuelab
 `Movable.ringkasanGerak()` (TODO 1) menyusun teks "kecepatan maksimum 180 km/jam" dari `kecepatanMaksimum()`. `Kendaraan.umur()` memakai `Math.max(0, ...)` supaya tidak pernah negatif.
 Keputusan interface vs abstract class ditulis di [keputusan.md](keputusan.md).
 
+### Screenshot Coding Movable.java
+![Movable.java](IMG/Movable-java.png)
+
+### Screenshot Coding Fuelable.java
+![Fuelable.java](IMG/Fuelable-java.png)
+
+### Screenshot Coding Kendaraan.java
+![Kendaraan.java](IMG/Kendaraan-java.png)
+
 ## Langkah 2: Enum dengan Perilaku (Java)
 Berkas: [java/TipeBahanBakar.java](java/TipeBahanBakar.java). Ketiga konstanta lengkap dengan harga, ditambah `biayaPengisian()` dan `ramahLingkungan()`.
 
+### Screenshot Coding TipeBahanBakar.java
+![TipeBahanBakar.java](IMG/TipeBahanBakar-java.png)
+
 ## Langkah 3: Dua Interface pada Satu Kelas
 Berkas: [java/Mobil.java](java/Mobil.java). `Mobil` bisa ditampung variabel bertipe `Kendaraan`, `Movable`, maupun `Fuelable` (bagian pertama `Main`).
+
+### Screenshot Coding Mobil.java
+![Mobil.java](IMG/Mobil-java.png)
 
 ## Langkah 4: Sepeda dan Interface Segregation
 Berkas: [java/Sepeda.java](java/Sepeda.java), [java/Genset.java](java/Genset.java). `Sepeda` bukan `Fuelable`, sehingga `isiPenuh(sepeda)` ditolak kompilator. Baris itu dibiarkan menjadi komentar di `Main.java` supaya program tetap bisa dikompilasi. Pesan galat lengkap ada di [percobaan/01-sepeda-ditolak/](percobaan/01-sepeda-ditolak/):
@@ -104,8 +119,21 @@ Main.java:10: error: incompatible types: Sepeda cannot be converted to Fuelable
 1 error
 ```
 
+![Pesan kompilator isiPenuh(sepeda)](IMG/percobaan-sepeda-ditolak.png)
+
+### Screenshot Coding Sepeda.java
+![Sepeda.java](IMG/Sepeda-java.png)
+
+### Screenshot Coding Genset.java
+![Genset.java](IMG/Genset-java.png)
+
+### Screenshot Coding Main.java
+![Main.java](IMG/Main-java.png)
+
 ## Hasil Running Program Java
 Dijalankan dengan `javac *.java` lalu `java Main` pada folder `java/`:
+
+![Hasil running Java](IMG/hasil-running-java.png)
 
 ```text
 === Satu objek Mobil, tiga tipe variabel ===
@@ -152,6 +180,9 @@ Checkpoint:
 ### Uji validasi (`UjiValidasi.java`)
 Dibuat terpisah supaya `Main.java` tidak perlu disunting. Dijalankan dengan `java UjiValidasi`:
 
+![UjiValidasi.java](IMG/UjiValidasi-java.png)
+![Hasil running UjiValidasi](IMG/uji-validasi-running.png)
+
 ```text
 === Uji validasi ===
   DITERIMA  Mobil.isiBahanBakar(20) pada 45 L
@@ -170,6 +201,18 @@ Dibuat terpisah supaya `Main.java` tidak perlu disunting. Dijalankan dengan `jav
 
 ## Langkah 5: Trait di PHP
 Berkas: [php/abstraksi.php](php/abstraksi.php), [php/main.php](php/main.php), [php/uji-validasi.php](php/uji-validasi.php). Seluruh struktur PHP ada di satu berkas (`abstraksi.php`), sesuai starter.
+
+### Screenshot Coding abstraksi.php
+![abstraksi.php (bagian 1 dari 4)](IMG/abstraksi-php-1.png)
+![abstraksi.php (bagian 2 dari 4)](IMG/abstraksi-php-2.png)
+![abstraksi.php (bagian 3 dari 4)](IMG/abstraksi-php-3.png)
+![abstraksi.php (bagian 4 dari 4)](IMG/abstraksi-php-4.png)
+
+### Screenshot Coding main.php
+![main.php](IMG/main-php.png)
+
+### Screenshot Coding uji-validasi.php
+![uji-validasi.php](IMG/uji-validasi-php.png)
 
 `Loggable::log()` mencetak `[jam] NamaKelas: pesan` memakai `static::class`. Trait dipakai oleh `Mobil` dan oleh `Pesanan`, dua kelas yang sama sekali tidak sekerabat: itulah penggunaan ulang horizontal. Kapan trait berbahaya dibahas di [keputusan.md](keputusan.md), Keputusan 4.
 
@@ -217,6 +260,20 @@ Checkpoint Langkah 5: `Mobil` dan `Pesanan` sama-sama memanggil `log()`. Terpenu
 ## Langkah 6: Latihan Mandiri `Peminjamable`
 Folder [latihan/](latihan/) (Java di `latihan/java/`, PHP di `latihan/php/`), dibuat tanpa starter.
 
+### Screenshot Coding Java (latihan)
+![Peminjamable.java](IMG/latihan-Peminjamable-java.png)
+![StatusPinjam.java](IMG/latihan-StatusPinjam-java.png)
+![Koleksi.java](IMG/latihan-Koleksi-java.png)
+![Buku.java](IMG/latihan-Buku-java.png)
+![Majalah.java](IMG/latihan-Majalah-java.png)
+![Skripsi.java](IMG/latihan-Skripsi-java.png)
+![Main.java](IMG/latihan-Main-java.png)
+
+### Screenshot Coding PHP (latihan)
+![koleksi.php (bagian 1 dari 2)](IMG/latihan-koleksi-php-1.png)
+![koleksi.php (bagian 2 dari 2)](IMG/latihan-koleksi-php-2.png)
+![main.php](IMG/latihan-main-php.png)
+
 | Kelas | `bolehDipinjam()` | `masaPinjamHari()` |
 |---|---|---|
 | `Buku` | `true` | 14 |
@@ -224,6 +281,8 @@ Folder [latihan/](latihan/) (Java di `latihan/java/`, PHP di `latihan/php/`), di
 | `Skripsi` | `false` | 0 |
 
 `StatusPinjam` (enum) memiliki case `Tersedia`, `Dipinjam`, `Terlambat`, `Hilang` dan method `keterangan()`. `Koleksi` (abstract class) menjadi identitas bersama, sedangkan `Peminjamable` menjadi kemampuan. Hasil `java Main` pada `latihan/java/`:
+
+![Hasil running latihan Java](IMG/latihan-hasil-running-java.png)
 
 ```text
 === Peminjamable ===
@@ -243,6 +302,10 @@ Checkpoint: fungsi `ringkas(Peminjamable p)` memproses ketiga jenis koleksi tanp
 ## Langkah 7: Class Diagram
 Berkas: [uml/abstraksi.puml](uml/abstraksi.puml) dan [uml/latihan.puml](uml/latihan.puml). Notasi yang dipakai:
 
+![abstraksi.puml (bagian 1 dari 2)](IMG/uml-abstraksi-1.png)
+![abstraksi.puml (bagian 2 dari 2)](IMG/uml-abstraksi-2.png)
+![latihan.puml](IMG/uml-latihan.png)
+
 | Hubungan | Notasi PlantUML | Gambar |
 |---|---|---|
 | Pewarisan (`extends`) | `Kendaraan <\|-- Mobil` | garis penuh, kepala segitiga kosong |
@@ -253,6 +316,10 @@ Interface ditulis dengan kata kunci `interface` dan stereotip `<<interface>>`, e
 
 ## Latihan Mandiri di Lab
 Hasil lengkap ada di [percobaan-mandiri.md](percobaan-mandiri.md).
+
+![Percobaan enum vs konstanta int](IMG/percobaan-enum-vs-int.png)
+![Percobaan interface gemuk](IMG/percobaan-interface-gemuk-1.png)
+![Interface gemuk setelah dipecah](IMG/percobaan-interface-gemuk-2.png)
 
 | Latihan | Hasil singkat |
 |---|---|
@@ -285,8 +352,8 @@ Hasil lengkap ada di [percobaan-mandiri.md](percobaan-mandiri.md).
 - [x] Latihan mandiri E1 dan E2.
 - [x] Tugas rumah 1 (`refleksi.md`) dan tugas rumah 2 (`persiapan-sesi07.md`, sementara).
 - [x] Pertanyaan demo dijawab di `persiapan-demo.md`.
-- [ ] Menjalankan seluruh kode PHP di komputer sendiri dan menyimpan screenshot di `IMG/`: `hasil-running-php.png`, `uji-validasi-php.png`, `latihan-php.png`.
-- [ ] Screenshot coding dan hasil running Java di `IMG/` (mengikuti pola pertemuan 2 sampai 5).
+- [x] Screenshot coding (Java, PHP, PlantUML) dan hasil running Java di `IMG/`. Gambar ini dirender dari isi berkas dan keluaran program yang sebenarnya, bukan tangkapan layar IDE. Boleh diganti dengan screenshot VS Code milik sendiri bila dosen menghendaki.
+- [ ] Menjalankan seluruh kode PHP di komputer sendiri dan menyimpan screenshot terminalnya: `IMG/hasil-running-php.png`, `IMG/uji-validasi-running-php.png`, `IMG/latihan-hasil-running-php.png`, lalu menambahkannya ke README.
 - [ ] Merender `uml/abstraksi.puml` menjadi gambar (opsional).
 - [ ] Mencocokkan `persiapan-sesi07.md` dengan modul sesi 7.
 - [ ] Lembar verifikasi demo (diisi dosen atau asisten saat demo).
