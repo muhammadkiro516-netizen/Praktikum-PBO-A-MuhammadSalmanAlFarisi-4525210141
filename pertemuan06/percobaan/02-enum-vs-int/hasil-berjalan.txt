@@ -1,7 +1,0 @@
-=== A. Konstanta int ===
-  hargaInt(1)  = 12000.0
-  hargaInt(99) = 0.0   <- lolos tanpa peringatan apa pun
-
-=== B. Enum ===
-  valueOf("SOLAR")     = SOLAR
-  valueOf("HIDROGEN")  ditolak saat berjalan: No enum constant TipeBahanBakar.HIDROGEN

@@ -1,3 +1,0 @@
-Lampu menyala
-Printer siap
-Mencetak: Laporan praktikum 6
