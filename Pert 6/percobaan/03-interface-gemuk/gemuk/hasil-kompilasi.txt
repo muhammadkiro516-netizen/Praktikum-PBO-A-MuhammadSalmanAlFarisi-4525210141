@@ -1,0 +1,4 @@
+Lampu.java:2: error: Lampu is not abstract and does not override abstract method perbaruiFirmware() in PerangkatSerbaBisa
+public class Lampu implements PerangkatSerbaBisa {
+       ^
+1 error
