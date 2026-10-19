@@ -1,0 +1,80 @@
+@startuml presensi
+title Sistem Presensi Kuliah — Class Diagram (Tugas Rumah Pertemuan 7)
+
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam nodesep 60
+skinparam ranksep 70
+hide empty members
+
+package model {
+  class KelasKuliah {
+    - kode : String
+    + {static} MAKS_PERTEMUAN : int = 16
+    + daftarkan(m : Mahasiswa) : void
+    + keluarkan(m : Mahasiswa) : void
+    + bukaPertemuan(tanggal : LocalDate, topik : String) : Pertemuan
+    + catatKehadiran(nomorPertemuan : int, m : Mahasiswa, status : StatusKehadiran) : void
+    + getPertemuan() : List<Pertemuan>
+    + getPeserta() : List<Mahasiswa>
+  }
+
+  class Pertemuan {
+    - nomor : int
+    - tanggal : LocalDate
+    - topik : String
+    ~ catat(m : Mahasiswa, status : StatusKehadiran) : void
+    + statusDari(m : Mahasiswa) : Optional<StatusKehadiran>
+    + getPresensi() : List<Presensi>
+  }
+
+  class Presensi <<nested di Pertemuan>> {
+    - Presensi(m : Mahasiswa, status : StatusKehadiran)
+    + getMahasiswa() : Mahasiswa
+    + getStatus() : StatusKehadiran
+  }
+
+  class Mahasiswa {
+    - npm : String
+    - nama : String
+  }
+
+  class Dosen {
+    - nip : String
+    - nama : String
+  }
+
+  class MataKuliah {
+    - kode : String
+    - nama : String
+    - sks : int
+  }
+
+  enum StatusKehadiran {
+    HADIR
+    IZIN
+    SAKIT
+    ALPA
+    + dihitungHadir() : boolean
+  }
+
+  KelasKuliah "1" *-- "0..16" Pertemuan : terdiri atas
+  Pertemuan "1" *-- "0..*" Presensi : mencatat
+  KelasKuliah "*" o-- "0..*" Mahasiswa : peserta
+  KelasKuliah "*" --> "1" MataKuliah : membuka
+  KelasKuliah "*" --> "1" Dosen : diampu oleh
+  Presensi "*" --> "1" Mahasiswa : milik
+  Presensi "*" --> "1" StatusKehadiran : berstatus
+}
+
+package service {
+  class RekapPresensi {
+    + {static} BATAS_LAYAK_UJIAN : double = 75.0
+    + persentaseKehadiran(kelas : KelasKuliah, m : Mahasiswa) : double
+    + layakUjian(kelas : KelasKuliah, m : Mahasiswa) : boolean
+    + hitung(kelas : KelasKuliah, m : Mahasiswa, status : StatusKehadiran) : long
+  }
+  RekapPresensi ..> KelasKuliah : <<use>>
+}
+
+@enduml

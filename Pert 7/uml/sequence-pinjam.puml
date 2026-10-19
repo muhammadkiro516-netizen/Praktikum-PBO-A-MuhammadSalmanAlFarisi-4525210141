@@ -1,0 +1,60 @@
+@startuml sequence-pinjam
+title Sistem Perpustakaan — Sequence Diagram: Peminjaman Koleksi
+
+skinparam shadowing false
+skinparam sequenceMessageAlign left
+autonumber
+
+actor "Anggota" as anggota
+actor "Petugas" as petugas
+participant ":PerpustakaanService" as svc
+participant "a : Anggota" as a
+participant "k : Koleksi\n(Buku/Majalah/Skripsi)" as k
+participant "p : Peminjaman" as p
+
+anggota -> petugas : menyerahkan koleksi\nyang ingin dipinjam
+petugas -> svc : pinjam(nomorAnggota, nomorInduk, tanggal)
+
+svc -> svc : ambilAnggota(nomorAnggota)
+svc --> a : (temukan di daftar anggota)
+svc -> svc : ambilKoleksi(nomorInduk)
+svc --> k : (temukan di katalog)
+
+svc -> k : dapatDipinjam()
+note right of k
+  KOLEKSI yang memutuskan: hanya ia yang tahu
+  jenis (skripsi?), status (rusak/hilang?), dan stok.
+end note
+
+alt koleksi tidak dapat dipinjam
+  k --> svc : false
+  svc -> k : alasanTidakDapatDipinjam()
+  k --> svc : "hanya boleh dibaca di tempat" / "berstatus rusak" / "tidak ada eksemplar tersedia"
+  svc --> petugas : IllegalStateException(alasan)
+  petugas --> anggota : permintaan ditolak
+else koleksi dapat dipinjam
+  k --> svc : true
+
+  svc -> svc : jumlahPinjamanAktif(a)
+  note right of svc
+    Batas 3 koleksi butuh data SELURUH peminjaman,
+    jadi dijaga oleh layanan, bukan oleh Anggota.
+  end note
+
+  alt anggota sudah meminjam 3 koleksi
+    svc --> petugas : IllegalStateException("sudah meminjam 3 koleksi")
+    petugas --> anggota : permintaan ditolak
+  else masih di bawah batas
+    svc -> k : kurangiStok()
+    svc -> p ** : new Peminjaman(a, k, tanggal)
+    p -> k : masaPinjamHari()
+    k --> p : 14 / 3
+    note right of p : tanggalJatuhTempo =\ntanggalPinjam + masa pinjam
+    svc -> svc : peminjaman.add(p)
+    note right of svc : data tersimpan\n(komposisi: p lahir di dalam layanan)
+    svc --> petugas : p : Peminjaman
+    petugas --> anggota : koleksi dipinjam,\nkembali paling lambat tanggalJatuhTempo
+  end
+end
+
+@enduml

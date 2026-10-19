@@ -1,0 +1,40 @@
+@startuml usecase
+title Sistem Perpustakaan — Use Case Diagram (Pertemuan 7)
+
+left to right direction
+skinparam shadowing false
+skinparam packageStyle rectangle
+
+actor "Anggota" as anggota
+actor "Petugas" as petugas
+
+rectangle "Sistem Perpustakaan" {
+  usecase "Cari koleksi" as UC1
+  usecase "Lihat riwayat\npeminjaman sendiri" as UC2
+
+  usecase "Tambah koleksi" as UC3
+  usecase "Daftarkan anggota" as UC4
+  usecase "Catat peminjaman" as UC5
+  usecase "Catat pengembalian" as UC6
+  usecase "Lihat daftar koleksi\nyang sedang dipinjam" as UC7
+
+  usecase "Periksa aturan peminjaman\n(status, stok, batas 3 koleksi)" as UC8
+  usecase "Hitung denda\nketerlambatan" as UC9
+}
+
+anggota --> UC1
+anggota --> UC2
+
+petugas --> UC3
+petugas --> UC4
+petugas --> UC5
+petugas --> UC6
+petugas --> UC7
+petugas --> UC1
+
+' Setiap peminjaman SELALU memeriksa aturan -> include.
+UC5 .> UC8 : <<include>>
+' Denda hanya muncul bila terlambat -> extend.
+UC9 .> UC6 : <<extend>>
+
+@enduml

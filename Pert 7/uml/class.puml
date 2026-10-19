@@ -1,0 +1,147 @@
+@startuml class
+title Sistem Perpustakaan — Class Diagram (Pertemuan 7)
+
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam nodesep 60
+skinparam ranksep 70
+hide empty members
+
+package model {
+
+  abstract class Koleksi {
+    - nomorInduk : String
+    - judul : String
+    - penulis : String
+    - tahun : int
+    - jumlahEksemplar : int
+    + {abstract} masaPinjamHari() : int
+    + {abstract} bolehDipinjam() : boolean
+    + tersedia() : boolean
+    + dapatDipinjam() : boolean
+    + alasanTidakDapatDipinjam() : String
+    + kurangiStok() : void
+    + tambahStok() : void
+    + tandaiRusak() : void
+    + tandaiHilang() : void
+  }
+
+  class Buku <<14 hari>> {
+    + Buku(..., judulBab : List<String>)
+    + tambahBab(nomor : int, judulBab : String) : void
+    + getBab() : List<Bab>
+    + masaPinjamHari() : int
+    + bolehDipinjam() : boolean
+  }
+
+  class Majalah <<3 hari>> {
+    + masaPinjamHari() : int
+    + bolehDipinjam() : boolean
+  }
+
+  class Skripsi <<tidak dapat dipinjam>> {
+    + masaPinjamHari() : int
+    + bolehDipinjam() : boolean
+  }
+
+  class Bab <<nested di Buku>> {
+    - nomor : int
+    - judul : String
+    - Bab(nomor : int, judul : String)
+  }
+
+  enum StatusKoleksi {
+    TERSEDIA
+    DIPINJAM
+    RUSAK
+    HILANG
+    + membolehkanPeminjaman() : boolean
+  }
+
+  interface JenisKeanggotaan {
+    + nama() : String
+    + dendaPerHari() : int
+  }
+
+  class Mahasiswa  <<Rp1.000/hari>>
+  class Dosen  <<Rp500/hari>>
+  class AnggotaKehormatan  <<bebas denda>>
+
+  class Anggota {
+    - nomorAnggota : String
+    - nama : String
+    + getNomorAnggota() : String
+    + getNama() : String
+    + getJenis() : JenisKeanggotaan
+  }
+
+  class Peminjaman {
+    - tanggalPinjam : LocalDate
+    - tanggalJatuhTempo : LocalDate
+    - tanggalKembali : LocalDate
+    + sudahKembali() : boolean
+    + kembalikan(tanggal : LocalDate) : void
+    + hariTerlambat(acuan : LocalDate) : long
+    + hitungDenda(acuan : LocalDate) : long
+  }
+
+  ' ── PEWARISAN dan REALISASI ──────────────────────────────
+  Koleksi <|-- Buku
+  Koleksi <|-- Majalah
+  Koleksi <|-- Skripsi
+  JenisKeanggotaan <|.. Mahasiswa
+  JenisKeanggotaan <|.. Dosen
+  JenisKeanggotaan <|.. AnggotaKehormatan
+
+  ' ── KOMPOSISI: bab tidak punya arti di luar buku ─────────
+  Buku "1" *-- "1..*" Bab : terdiri atas
+
+  ' ── ASOSIASI ─────────────────────────────────────────────
+  Koleksi "*" --> "1" StatusKoleksi : berstatus
+  Anggota "*" --> "1" JenisKeanggotaan : berjenis
+  Peminjaman "*" --> "1" Anggota : peminjam
+  Peminjaman "*" --> "1" Koleksi : dipinjam
+
+  ' ── DEPENDENSI: hanya memakai saat menghitung denda ──────
+  Peminjaman ..> JenisKeanggotaan : <<use>>
+}
+
+package service {
+  class PerpustakaanService {
+    + {static} BATAS_PINJAMAN_AKTIF : int = 3
+    + tambahKoleksi(k : Koleksi) : void
+    + hapusKoleksi(nomorInduk : String) : Koleksi
+    + daftarkanAnggota(a : Anggota) : void
+    + cariKoleksi(nomorInduk : String) : Optional<Koleksi>
+    + cariJudul(kataKunci : String) : List<Koleksi>
+    + cariAnggota(nomorAnggota : String) : Optional<Anggota>
+    + pinjam(nomorAnggota : String, nomorInduk : String) : Peminjaman
+    + pinjam(nomorAnggota : String, nomorInduk : String, tanggal : LocalDate) : Peminjaman
+    + kembalikan(nomorAnggota : String, nomorInduk : String) : long
+    + kembalikan(nomorAnggota : String, nomorInduk : String, tanggal : LocalDate) : long
+    + daftarSedangDipinjam() : List<Peminjaman>
+    + riwayat(nomorAnggota : String) : List<Peminjaman>
+    + getKoleksi() : List<Koleksi>
+    + getAnggota() : List<Anggota>
+    + getPeminjaman() : List<Peminjaman>
+  }
+
+  ' ── AGREGASI: diterima dari luar, tetap hidup bila dilepas ──
+  PerpustakaanService "1" o-- "*" Koleksi : katalog
+  PerpustakaanService "1" o-- "*" Anggota : terdaftar
+
+  ' ── KOMPOSISI: Peminjaman lahir di dalam pinjam() ────────
+  PerpustakaanService "1" *-- "*" Peminjaman : mencatat
+}
+
+note bottom of Bab
+  Komposisi di kode: constructor Bab privat,
+  Buku.getBab() mengembalikan List.copyOf(...).
+end note
+
+note bottom of Peminjaman
+  tanggalKembali kosong (null) selama belum dikembalikan.
+  tanggalJatuhTempo = tanggalPinjam + koleksi.masaPinjamHari().
+end note
+
+@enduml

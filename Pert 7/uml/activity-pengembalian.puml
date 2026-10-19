@@ -1,0 +1,37 @@
+@startuml activity-pengembalian
+title Sistem Perpustakaan — Activity Diagram: Pengembalian Koleksi dan Denda
+
+skinparam shadowing false
+
+start
+:Petugas memasukkan nomor anggota\ndan nomor induk koleksi;
+:Layanan mencari peminjaman aktif\nanggota tersebut untuk koleksi itu;
+
+if (peminjaman aktif ditemukan?) then (tidak)
+  :Tolak: anggota tidak sedang\nmeminjam koleksi ini;
+  stop
+else (ya)
+endif
+
+:Catat tanggal kembali pada Peminjaman;
+:Tambah stok koleksi satu eksemplar\n(status DIPINJAM menjadi TERSEDIA);
+:Hitung hari terlambat =\nmaks(0, tanggal kembali - jatuh tempo);
+
+if (hari terlambat > 0?) then (ya)
+  :denda = hari terlambat x\ndenda per hari jenis keanggotaan;
+  if (jenis keanggotaan?) then (Mahasiswa)
+    :Rp1.000 per hari;
+  elseif (Dosen) then
+    :Rp500 per hari;
+  elseif (Anggota Kehormatan) then
+    :Bebas denda (Rp0);
+  else (jenis lain)
+    :dendaPerHari() milik jenis tersebut;
+  endif
+else (tidak)
+  :denda = Rp0;
+endif
+
+:Tampilkan denda kepada petugas;
+stop
+@enduml
