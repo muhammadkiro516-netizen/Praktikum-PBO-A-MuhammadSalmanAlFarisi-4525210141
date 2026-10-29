@@ -1,0 +1,4 @@
+SalahTipe.java:4: error: incompatible types: int cannot be converted to TipeBahanBakar
+        TipeBahanBakar t = 99;
+                           ^
+1 error

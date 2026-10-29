@@ -1,0 +1,145 @@
+@startuml perpustakaan-class
+title Sistem Perpustakaan — Class Diagram (Sesi 9)
+
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+
+package model {
+
+  abstract class Koleksi {
+    - nomorInduk : String
+    - judul : String
+    - penulis : String
+    - tahun : int
+    - jumlahEksemplar : int
+    + {abstract} masaPinjamHari() : int
+    + {abstract} bolehDipinjam() : boolean
+    + tersedia() : boolean
+    + kurangiStok() : void
+    + tambahStok() : void
+    + tandaiRusak() : void
+    + tandaiHilang() : void
+  }
+
+  class Buku {
+    - {static} MASA_PINJAM_HARI : int = 14
+    + tambahBab(nomor : int, judulBab : String) : void
+    + getBab() : List<Bab>
+  }
+
+  class Majalah {
+    - {static} MASA_PINJAM_HARI : int = 3
+  }
+
+  class Skripsi {
+    ' masaPinjamHari() = 0 dan bolehDipinjam() = false
+  }
+
+  class Bab <<nested di Buku>> {
+    - nomor : int
+    - judul : String
+  }
+
+  class Anggota {
+    + {static} BATAS_PINJAMAN : int = 3
+    - nomorAnggota : String
+    - nama : String
+    + jumlahPinjamanAktif() : int
+    + bolehMeminjamLagi() : boolean
+    + catatPeminjaman(koleksi : Koleksi, tanggalPinjam : LocalDate) : Peminjaman
+    + getRiwayat() : List<Peminjaman>
+  }
+
+  class Peminjaman {
+    - tanggalPinjam : LocalDate
+    - tanggalJatuhTempo : LocalDate
+    - tanggalKembali : LocalDate
+    + sudahKembali() : boolean
+    + kembalikan(tanggal : LocalDate) : void
+    + hariTerlambat() : long
+    + hitungDenda() : long
+  }
+
+  enum StatusKoleksi {
+    TERSEDIA
+    DIPINJAM
+    RUSAK
+    HILANG
+    + bisaDipinjam() : boolean
+  }
+
+  interface JenisKeanggotaan <<interface>> {
+    + nama() : String
+    + dendaPerHari() : int
+  }
+
+  class KeanggotaanMahasiswa {
+    dendaPerHari() = 1000
+  }
+  class KeanggotaanDosen {
+    dendaPerHari() = 500
+  }
+  class KeanggotaanKehormatan {
+    dendaPerHari() = 0
+  }
+
+  class Jurusan {
+    - kode : String
+    - nama : String
+    + daftarkan(m : Mahasiswa) : void
+    + keluarkan(m : Mahasiswa) : void
+    + getMahasiswa() : List<Mahasiswa>
+  }
+
+  class "Jurusan.Mahasiswa" as Mahasiswa {
+    - nim : String
+    - nama : String
+  }
+
+  ' ── PEWARISAN dan REALISASI ───────────────────────────────
+  Koleksi <|-- Buku
+  Koleksi <|-- Majalah
+  Koleksi <|-- Skripsi
+  JenisKeanggotaan <|.. KeanggotaanMahasiswa
+  JenisKeanggotaan <|.. KeanggotaanDosen
+  JenisKeanggotaan <|.. KeanggotaanKehormatan
+
+  ' ── RELASI ───────────────────────────────────────────────
+  ' Bab tidak punya arti di luar buku yang memuatnya, dan tidak pernah
+  ' berpindah buku: KOMPOSISI.
+  Buku "1" *-- "0..*" Bab : terdiri atas >
+
+  ' Peminjaman lahir di dalam Anggota dan tidak bermakna tanpa anggotanya:
+  ' KOMPOSISI.
+  Anggota "1" *-- "0..*" Peminjaman : mencatat >
+
+  ' Koleksi tetap ada walau tidak ada yang meminjamnya: ASOSIASI.
+  Peminjaman "*" --> "1" Koleksi : meminjam >
+
+  Anggota --> "1" JenisKeanggotaan : berjenis
+  Koleksi --> "1" StatusKoleksi : berstatus
+
+  ' Mahasiswa dibuat di luar lalu diterima Jurusan: AGREGASI.
+  Jurusan "1" o-- "0..*" Mahasiswa : menaungi >
+}
+
+package service {
+  class PerpustakaanService {
+    + tambahKoleksi(k : Koleksi) : void
+    + daftarkanAnggota(a : Anggota) : void
+    + cariKoleksi(nomorInduk : String) : Koleksi
+    + pinjam(nomorAnggota : String, nomorInduk : String) : Peminjaman
+    + pinjam(nomorAnggota : String, nomorInduk : String, tanggal : LocalDate) : Peminjaman
+    + kembalikan(nomorAnggota : String, nomorInduk : String) : Peminjaman
+    + kembalikan(nomorAnggota : String, nomorInduk : String, tanggal : LocalDate) : Peminjaman
+    + daftarSedangDipinjam() : List<Peminjaman>
+    + riwayatAnggota(nomorAnggota : String) : List<Peminjaman>
+  }
+
+  ' Koleksi dan Anggota dibuat di luar lalu diterima layanan, dan tetap
+  ' bermakna bila layanan dibubarkan: AGREGASI (alasan di analisis.md).
+  PerpustakaanService "1" o-- "0..*" Koleksi : mengelola >
+  PerpustakaanService "1" o-- "0..*" Anggota : mengelola >
+}
+
+@enduml

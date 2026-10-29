@@ -1,0 +1,5 @@
+Main.java:10: error: incompatible types: Sepeda cannot be converted to Fuelable
+        isiPenuh(sepeda);   // <- komentar dihapus: kompilasi harus gagal
+                 ^
+Note: Some messages have been simplified; recompile with -Xdiags:verbose to get full output
+1 error
