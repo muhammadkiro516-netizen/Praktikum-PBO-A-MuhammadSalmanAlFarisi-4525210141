@@ -24,6 +24,8 @@
 
 Setiap pertemuan membangun di atas pertemuan sebelumnya. Mulai dari menjaga data tetap benar, sampai memodelkan relasi antarobjek dengan komposisi dan agregasi.
 
+> **Catatan:** Pertemuan 8 adalah UTS — tidak ada sesi praktikum.
+
 ```mermaid
 flowchart LR
     Z["🌱 P1<br/>Objek Pertama"] --> A["🔒 P2<br/>Enkapsulasi"] --> B["🏗️ P3<br/>Constructor & Static"]
@@ -31,7 +33,7 @@ flowchart LR
     C --> D["🎭 P5<br/>Polimorfisme"]
     D --> E["🧩 P6<br/>Abstraksi"]
     E --> F["📐 P7<br/>UML & Relasi"]
-    F --> G["🔗 P8/P9<br/>Komposisi & Agregasi"]
+    F --> G["🔗 P9<br/>Komposisi & Agregasi"]
     style Z fill:#fffde7,stroke:#F9A825,color:#000
     style A fill:#e8f5e9,stroke:#2ea44f,color:#000
     style B fill:#e3f2fd,stroke:#0A66C2,color:#000
@@ -51,10 +53,8 @@ flowchart LR
 | 5 | 🎭 **Polimorfisme** | `BangunDatar` dan `Notifikasi` | upcasting, dynamic dispatch, Open-Closed, refaktor `instanceof` | [📄 Buka](Pert%205/README.md) |
 | 6 | 🧩 **Abstract class, interface, enum, trait** | `Kendaraan`, `Movable`, `Fuelable`, `TipeBahanBakar` | identitas vs kemampuan, `implements` banyak, enum berperilaku, `trait` | [📄 Buka](Pert%206/README.md) |
 | 7 | 📐 **Pemodelan relasi objek dan UML Class Diagram** | Sistem Perpustakaan | komposisi, agregasi, asosiasi, dependensi, multiplicity | [📄 Buka](Pert%207/README.md) |
-| 8 | 🔗 **UML Class Diagram, Komposisi, dan Agregasi (Java Package)** | Sistem Perpustakaan (`model/`, `service/`) | `package`, komposisi, agregasi, `List.copyOf`, layanan | [📄 Buka](Pert%208/README.md) |
-| 9 | 🔗 **UML Class Diagram, Komposisi, dan Agregasi (Java Package)** | Sistem Perpustakaan (`model/`, `service/`) | `package`, komposisi, agregasi, `List.copyOf`, layanan | [📄 Buka](Pert%209/README.md) |
-
-> ℹ️ **Pertemuan 8** tidak ada sesi praktikum (libur/digabung). Folder `Pert 8/` memuat laporan Pertemuan 9 sebagai dokumen pelengkap.
+| ~~8~~ | ~~UTS~~ | — | — | — |
+| 9 | 🔗 **UML Class Diagram, Komposisi, dan Agregasi** | Sistem Perpustakaan (`model/`, `service/`) | `package`, komposisi, agregasi, `List.copyOf`, layanan | [📄 Buka](Pert%209/README.md) |
 
 ---
 
@@ -119,8 +119,8 @@ classDiagram
 
 | Bagian | Isi |
 |---|---|
-| ☕ **Java** | `package model`: `StatusKoleksi`, `Koleksi`, `Buku`, `Majalah`, `Skripsi`, `JenisKeanggotaan`, `KeanggotaanMahasiswa`, `KeanggotaanDosen`, `KeanggotaanKehormatan`, `Anggota`, `Peminjaman`, `Jurusan` |
-| ☕ **Java** | `package service`: `PerpustakaanService` |
+| ☕ **Java** `package model` | `StatusKoleksi`, `Koleksi`, `Buku`, `Majalah`, `Skripsi`, `JenisKeanggotaan`, `KeanggotaanMahasiswa`, `KeanggotaanDosen`, `KeanggotaanKehormatan`, `Anggota`, `Peminjaman`, `Jurusan` |
+| ☕ **Java** `package service` | `PerpustakaanService` |
 | ☕ **Java** | `Main.java`: demo komposisi, agregasi, peminjaman, penolakan aturan, denda |
 | 🐘 **PHP** | `relasi.php` + `main.php`: komposisi `Buku`–`Bab` dan agregasi `Jurusan`–`Mahasiswa` |
 | 📐 **UML** | `uml/perpustakaan.puml`: class diagram lengkap dengan multiplicity |
@@ -145,10 +145,9 @@ classDiagram
 ├── 📁 Pert 6/   ☕ java/  🐘 php/  📚 latihan/  📐 uml/  🖼️ IMG/  🧪 percobaan/  🌱 starter/
 │                📝 keputusan.md  📝 percobaan-mandiri.md  📝 refleksi.md  📝 persiapan-sesi07.md
 │                📝 persiapan-demo.md  📄 README.md
-├── 📁 Pert 7/   ☕ java/  🐘 php/  📐 uml/  🧪 percobaan/  🏠 tugas-rumah/  🌱 starter/
+├── 📁 Pert 7/   ☕ java/model/  ☕ java/service/  🐘 php/src/  📐 uml/  🧪 percobaan/  🏠 tugas-rumah/  🌱 starter/
 │                📝 analisis.md  📝 bukti-relasi.md  📝 percobaan-mandiri.md  📝 persiapan-demo.md  📄 README.md
-├── 📁 Pert 8/   ☕ java/model/  ☕ java/service/  🐘 php/  📐 uml/  🖼️ IMG/  🌱 starter/
-│   (≡ Pert 9)   📝 analisis.md  📝 bukti-relasi.md  📝 deskripsi-kebutuhan.md  📄 README.md
+│   (Pert 8 = UTS, tidak ada praktikum)
 └── 📁 Pert 9/   ☕ java/model/  ☕ java/service/  🐘 php/  📐 uml/  🖼️ IMG/  🌱 starter/
                  📝 analisis.md  📝 bukti-relasi.md  📝 deskripsi-kebutuhan.md  📄 README.md
 ```
@@ -171,14 +170,14 @@ javac *.java
 java Main
 ```
 
-**Pertemuan 7** (dengan package, sub-folder):
+**Pertemuan 7** (dengan package):
 ```cmd
 cd "Pert 7\java"
 javac -d out Main.java model\*.java service\*.java
 java -cp out Main
 ```
 
-**Pertemuan 8 / 9** (dengan package):
+**Pertemuan 9** (dengan package):
 ```cmd
 cd "Pert 9\java"
 javac -d out Main.java model\*.java service\*.java
