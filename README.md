@@ -2,11 +2,11 @@
 
 # 🧩 Praktikum Pemrograman Berorientasi Objek
 
-**Dari objek pertama sampai abstraksi, ditulis dalam dua bahasa: Java ☕ dan PHP 🐘**
+**Dari objek pertama sampai komposisi dan agregasi, ditulis dalam dua bahasa: Java ☕ dan PHP 🐘**
 
 ![Java](https://img.shields.io/badge/Java-17%2B-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
 ![PHP](https://img.shields.io/badge/PHP-8.1%2B-777BB4?style=for-the-badge&logo=php&logoColor=white)
-![Pertemuan](https://img.shields.io/badge/Pertemuan-1%20s%2Fd%206-2ea44f?style=for-the-badge)
+![Pertemuan](https://img.shields.io/badge/Pertemuan-1%20s%2Fd%209-2ea44f?style=for-the-badge)
 ![Kelas](https://img.shields.io/badge/Kelas-A-0A66C2?style=for-the-badge)
 
 | | |
@@ -22,7 +22,7 @@
 
 ## 🗺️ Peta Perjalanan
 
-Setiap pertemuan membangun di atas pertemuan sebelumnya. Mulai dari menjaga data tetap benar, sampai memisahkan kontrak dari identitas supaya kode bisa dikembangkan tanpa disentuh.
+Setiap pertemuan membangun di atas pertemuan sebelumnya. Mulai dari menjaga data tetap benar, sampai memodelkan relasi antarobjek dengan komposisi dan agregasi.
 
 ```mermaid
 flowchart LR
@@ -30,12 +30,16 @@ flowchart LR
     B --> C["🧬 P4<br/>Pewarisan"]
     C --> D["🎭 P5<br/>Polimorfisme"]
     D --> E["🧩 P6<br/>Abstraksi"]
+    E --> F["📐 P7<br/>UML & Relasi"]
+    F --> G["🔗 P8/P9<br/>Komposisi & Agregasi"]
     style Z fill:#fffde7,stroke:#F9A825,color:#000
     style A fill:#e8f5e9,stroke:#2ea44f,color:#000
     style B fill:#e3f2fd,stroke:#0A66C2,color:#000
     style C fill:#fff3e0,stroke:#ED8B00,color:#000
     style D fill:#f3e5f5,stroke:#8E24AA,color:#000
     style E fill:#e0f7fa,stroke:#00838F,color:#000
+    style F fill:#fce4ec,stroke:#C62828,color:#000
+    style G fill:#ede7f6,stroke:#4527A0,color:#000
 ```
 
 | # | Topik | Studi Kasus | Kata Kunci | Laporan |
@@ -46,59 +50,82 @@ flowchart LR
 | 4 | 🧬 **Pewarisan, overriding, komposisi** | `Pegawai` | `extends`, `super`, kelas abstrak, "adalah" vs "memiliki" | [📄 Buka](Pert%204/README.md) |
 | 5 | 🎭 **Polimorfisme** | `BangunDatar` dan `Notifikasi` | upcasting, dynamic dispatch, Open-Closed, refaktor `instanceof` | [📄 Buka](Pert%205/README.md) |
 | 6 | 🧩 **Abstract class, interface, enum, trait** | `Kendaraan`, `Movable`, `Fuelable`, `TipeBahanBakar` | identitas vs kemampuan, `implements` banyak, enum berperilaku, `trait` | [📄 Buka](Pert%206/README.md) |
+| 7 | 📐 **Pemodelan relasi objek dan UML Class Diagram** | Sistem Perpustakaan | komposisi, agregasi, asosiasi, dependensi, multiplicity | [📄 Buka](Pert%207/README.md) |
+| 8 | 🔗 **UML Class Diagram, Komposisi, dan Agregasi (Java Package)** | Sistem Perpustakaan (`model/`, `service/`) | `package`, komposisi, agregasi, `List.copyOf`, layanan | [📄 Buka](Pert%208/README.md) |
+| 9 | 🔗 **UML Class Diagram, Komposisi, dan Agregasi (Java Package)** | Sistem Perpustakaan (`model/`, `service/`) | `package`, komposisi, agregasi, `List.copyOf`, layanan | [📄 Buka](Pert%209/README.md) |
+
+> ℹ️ **Pertemuan 8** tidak ada sesi praktikum (libur/digabung). Folder `Pert 8/` memuat laporan Pertemuan 9 sebagai dokumen pelengkap.
 
 ---
 
-## 🧩 Sorotan Terbaru: Pertemuan 6
+## 🔗 Sorotan Terbaru: Pertemuan 9
 
-> **Pisahkan "apa benda ini" dari "apa yang bisa dilakukannya".** Identitas masuk ke *abstract class*, kemampuan masuk ke *interface*. Satu kelas hanya boleh `extends` satu induk, tetapi boleh `implements` banyak kemampuan.
+> **Derajat keterikatan antarobjek harus diputuskan sebelum menulis kode, lalu dibuktikan di kode, bukan hanya di gambar.** Uji sederhana: *"Kalau induknya dihapus, apakah bagian ini masih masuk akal?"*
 
 ```mermaid
 classDiagram
-    class Kendaraan {
+    class Koleksi {
         <<abstract>>
-        +umur(tahunSekarang) int
-        +jumlahRoda() int
+        +nomorInduk: String
+        +judul: String
+        +masaPinjamHari() int
+        +bolehDipinjam() bool
+        +tersedia() bool
     }
-    class Movable {
-        <<interface>>
-        +bergerak()
+    class Buku {
+        +tambahBab(nomor, judul)
+        +getBab() List~Bab~
     }
-    class Fuelable {
-        <<interface>>
-        +isiBahanBakar(jumlah)
+    class Bab {
+        -nomor: int
+        -judul: String
     }
-    Kendaraan <|-- Mobil
-    Kendaraan <|-- Sepeda
-    Movable <|.. Mobil
-    Fuelable <|.. Mobil
-    Movable <|.. Sepeda
-    Fuelable <|.. Genset
+    class Anggota {
+        +catatPeminjaman(koleksi, tanggal) Peminjaman
+        +getRiwayat() List~Peminjaman~
+    }
+    class Peminjaman {
+        +hariTerlambat() long
+        +hitungDenda() long
+    }
+    class PerpustakaanService {
+        +tambahKoleksi(k)
+        +daftarkanAnggota(a)
+        +pinjam(nomorAnggota, nomorInduk) Peminjaman
+        +kembalikan(nomorAnggota, nomorInduk) Peminjaman
+    }
+    Koleksi <|-- Buku
+    Koleksi <|-- Majalah
+    Koleksi <|-- Skripsi
+    Buku *-- Bab
+    Anggota *-- Peminjaman
+    PerpustakaanService o-- Koleksi
+    PerpustakaanService o-- Anggota
+    Peminjaman --> Koleksi
+    Peminjaman --> Anggota
 ```
 
-`Sepeda` bergerak tetapi tidak butuh bahan bakar, sehingga kompilator menolak pemanggilan yang salah sebelum program sempat berjalan:
-
-```java
-isiPenuh(mobil);    // OK: Mobil adalah Fuelable
-isiPenuh(genset);   // OK: Genset juga Fuelable, walau tidak bergerak
-isiPenuh(sepeda);   // error: Sepeda cannot be converted to Fuelable
-```
+| Relasi | Jenis | Multiplicity | Alasan singkat |
+|---|---|---|---|
+| `Buku` — `Bab` | **Komposisi** `*--` | 1 ke 0..* | Bab tidak bermakna di luar bukunya; constructor `Bab` privat |
+| `Anggota` — `Peminjaman` | **Komposisi** `*--` | 1 ke 0..* | Peminjaman lahir di dalam `Anggota.catatPeminjaman()` |
+| `PerpustakaanService` — `Koleksi`, `Anggota` | **Agregasi** `o--` | 1 ke 0..* | Dibuat di luar, tetap hidup bila layanan dibubarkan |
+| `Peminjaman` — `Koleksi`, `Anggota` | **Asosiasi** `-->` | * ke 1 | Hanya menyimpan rujukan |
 
 <details>
-<summary><b>✨ Yang dikerjakan di pertemuan 6 (klik untuk membuka)</b></summary>
+<summary><b>✨ Yang dikerjakan di pertemuan 9 (klik untuk membuka)</b></summary>
 
 <br>
 
 | Bagian | Isi |
 |---|---|
-| ☕ **Java** | `Movable` (dengan `default` method), `Fuelable`, enum `TipeBahanBakar`, `Kendaraan`, `Mobil`, `Sepeda`, `Genset`, dan `UjiValidasi` |
-| 🐘 **PHP** | Padanan lengkap dalam `abstraksi.php`: backed enum, trait `Loggable` yang dipakai `Mobil` dan `Pesanan` |
-| 📚 **Latihan** | `Peminjamable` dan enum `StatusPinjam` untuk `Buku`, `Majalah`, `Skripsi` di dua bahasa |
-| 📐 **UML** | Diagram yang membedakan pewarisan (garis penuh) dari realisasi interface (garis putus) di [uml/abstraksi.puml](Pert%206/uml/abstraksi.puml) |
-| 🧪 **Percobaan** | `Sepeda` ditolak kompilator, enum vs konstanta `int`, dan interface gemuk yang dipecah |
-| 📝 **Keputusan** | Empat catatan rancangan dan dua pesan kompilator di [keputusan.md](Pert%206/keputusan.md) |
-| 🏠 **Tugas rumah** | [Refleksi interface vs `instanceof`](Pert%206/refleksi.md) dan [daftar kelas untuk sesi 7](Pert%206/persiapan-sesi07.md) |
-| 🎤 **Persiapan demo** | Jawaban tujuh pertanyaan demo di [persiapan-demo.md](Pert%206/persiapan-demo.md) |
+| ☕ **Java** | `package model`: `StatusKoleksi`, `Koleksi`, `Buku`, `Majalah`, `Skripsi`, `JenisKeanggotaan`, `KeanggotaanMahasiswa`, `KeanggotaanDosen`, `KeanggotaanKehormatan`, `Anggota`, `Peminjaman`, `Jurusan` |
+| ☕ **Java** | `package service`: `PerpustakaanService` |
+| ☕ **Java** | `Main.java`: demo komposisi, agregasi, peminjaman, penolakan aturan, denda |
+| 🐘 **PHP** | `relasi.php` + `main.php`: komposisi `Buku`–`Bab` dan agregasi `Jurusan`–`Mahasiswa` |
+| 📐 **UML** | `uml/perpustakaan.puml`: class diagram lengkap dengan multiplicity |
+| 📝 **Analisis** | [analisis.md](Pert%209/analisis.md): kata benda, kata kerja, aturan bisnis, keputusan relasi |
+| 🔍 **Bukti** | [bukti-relasi.md](Pert%209/bukti-relasi.md): percobaan `getBab().clear()` ditolak, bukti komposisi vs agregasi |
 
 </details>
 
@@ -115,9 +142,15 @@ isiPenuh(sepeda);   // error: Sepeda cannot be converted to Fuelable
 ├── 📁 Pert 5/   ☕ java/  🐘 php/  🖼️ IMG/  🧪 percobaan/  🏠 tugas-rumah/  🌱 starter/
 │                📝 penelusuran.md  📝 refleksi.md  📝 percobaan-mandiri.md  📝 persiapan-demo.md
 │                📐 diagram.puml  📐 sekuens-dispatch.puml  📐 diagram-notifikasi.puml  📄 README.md
-└── 📁 Pert 6/   ☕ java/  🐘 php/  📚 latihan/  📐 uml/  🖼️ IMG/  🧪 percobaan/  🌱 starter/
-                 📝 keputusan.md  📝 percobaan-mandiri.md  📝 refleksi.md  📝 persiapan-sesi07.md
-                 📝 persiapan-demo.md  📄 README.md
+├── 📁 Pert 6/   ☕ java/  🐘 php/  📚 latihan/  📐 uml/  🖼️ IMG/  🧪 percobaan/  🌱 starter/
+│                📝 keputusan.md  📝 percobaan-mandiri.md  📝 refleksi.md  📝 persiapan-sesi07.md
+│                📝 persiapan-demo.md  📄 README.md
+├── 📁 Pert 7/   ☕ java/  🐘 php/  📐 uml/  🧪 percobaan/  🏠 tugas-rumah/  🌱 starter/
+│                📝 analisis.md  📝 bukti-relasi.md  📝 percobaan-mandiri.md  📝 persiapan-demo.md  📄 README.md
+├── 📁 Pert 8/   ☕ java/model/  ☕ java/service/  🐘 php/  📐 uml/  🖼️ IMG/  🌱 starter/
+│   (≡ Pert 9)   📝 analisis.md  📝 bukti-relasi.md  📝 deskripsi-kebutuhan.md  📄 README.md
+└── 📁 Pert 9/   ☕ java/model/  ☕ java/service/  🐘 php/  📐 uml/  🖼️ IMG/  🌱 starter/
+                 📝 analisis.md  📝 bukti-relasi.md  📝 deskripsi-kebutuhan.md  📄 README.md
 ```
 
 ---
@@ -131,16 +164,25 @@ isiPenuh(sepeda);   // error: Sepeda cannot be converted to Fuelable
 ### ☕ Java
 *JDK 17 atau lebih baru*
 
+**Pertemuan 1–6** (tanpa package):
 ```cmd
 cd "Pert 6\java"
 javac *.java
 java Main
 ```
 
-Program lain di folder yang sama:
-
+**Pertemuan 7** (dengan package, sub-folder):
 ```cmd
-java UjiValidasi
+cd "Pert 7\java"
+javac -d out Main.java model\*.java service\*.java
+java -cp out Main
+```
+
+**Pertemuan 8 / 9** (dengan package):
+```cmd
+cd "Pert 9\java"
+javac -d out Main.java model\*.java service\*.java
+java -cp out Main
 ```
 
 </td>
@@ -149,13 +191,26 @@ java UjiValidasi
 ### 🐘 PHP
 *PHP 8.1 atau lebih baru*
 
+**Pertemuan 1–6:**
 ```cmd
 cd "Pert 6\php"
 php main.php
 php uji-validasi.php
 ```
 
-Untuk pertemuan lain, ganti angka `6` dengan `1` sampai `5`.
+**Pertemuan 7:**
+```cmd
+cd "Pert 7\php"
+php main.php
+```
+
+**Pertemuan 9:**
+```cmd
+cd "Pert 9\php"
+php main.php
+```
+
+Untuk pertemuan lain, ganti angka sesuai nomor pertemuan.
 
 </td>
 </tr>
@@ -174,6 +229,7 @@ Untuk pertemuan lain, ganti angka `6` dengan `1` sampai `5`.
 | 🔓 **Open-Closed** | Terbuka untuk ditambah, tertutup untuk diubah |
 | 🏷️ **Tanpa angka ajaib** | Nilai tetap ditulis sebagai konstanta bernama, dan status ditulis sebagai `enum` |
 | 🧩 **Kontrak kecil** | Kemampuan dipecah menjadi interface kecil (`Movable`, `Fuelable`) sehingga tiap kelas hanya menerima yang ia butuhkan |
+| 🔗 **Relasi yang tepat** | Komposisi bila bagian tidak bermakna tanpa induknya; agregasi bila bagian tetap hidup setelah dilepas |
 
 ---
 
