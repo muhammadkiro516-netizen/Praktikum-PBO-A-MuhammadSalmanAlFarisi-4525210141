@@ -1,0 +1,12 @@
+[2026-11-11 10:04:02] AnggotaTidakDitemukanException: Anggota dengan ID TIDAK_ADA tidak ditemukan.
+[2026-11-11 10:04:02] BukuTidakDitemukanException: Buku dengan ISBN ISBN-TIDAK-ADA tidak ditemukan.
+[2026-11-11 10:04:02] BukuSedangDipinjamException: Semua eksemplar "The C Programming Language" (ISBN 978-0-13-110362-7) sedang dipinjam.
+[2026-11-11 10:04:02] BukuSedangDipinjamException: Semua eksemplar "The Pragmatic Programmer" (ISBN 978-0-20-163361-5) sedang dipinjam.
+[2026-11-11 10:04:02] BukuTidakDitemukanException: Buku dengan ISBN ISBN-X tidak ditemukan.
+[2026-11-11 10:04:02] AnggotaTidakDitemukanException: Anggota dengan ID ID-X tidak ditemukan.
+[2026-11-11 10:04:37] AnggotaTidakDitemukanException: Anggota dengan ID TIDAK_ADA tidak ditemukan.
+[2026-11-11 10:04:37] BukuTidakDitemukanException: Buku dengan ISBN ISBN-TIDAK-ADA tidak ditemukan.
+[2026-11-11 10:04:37] BukuSedangDipinjamException: Semua eksemplar "The C Programming Language" (ISBN 978-0-13-110362-7) sedang dipinjam.
+[2026-11-11 10:04:37] BatasPinjamTerlampauiException: Anggota A001 telah mencapai batas pinjam maksimum (3 koleksi).
+[2026-11-11 10:04:37] BukuTidakDitemukanException: Buku dengan ISBN ISBN-X tidak ditemukan.
+[2026-11-11 10:04:37] AnggotaTidakDitemukanException: Anggota dengan ID ID-X tidak ditemukan.

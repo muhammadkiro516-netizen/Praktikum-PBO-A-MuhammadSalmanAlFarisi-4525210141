@@ -1,0 +1,4 @@
+=== Daftar Buku Perpustakaan ===
+ISBN: 978-0-13-468599-1    | Judul: Effective Java                           | Stok: 1
+ISBN: 978-0-13-110362-7    | Judul: The C Programming Language               | Stok: 0
+ISBN: 978-0-20-163361-5    | Judul: The Pragmatic Programmer                 | Stok: 0

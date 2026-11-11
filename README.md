@@ -6,7 +6,7 @@
 
 ![Java](https://img.shields.io/badge/Java-17%2B-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
 ![PHP](https://img.shields.io/badge/PHP-8.1%2B-777BB4?style=for-the-badge&logo=php&logoColor=white)
-![Pertemuan](https://img.shields.io/badge/Pertemuan-1%20s%2Fd%209-2ea44f?style=for-the-badge)
+![Pertemuan](https://img.shields.io/badge/Pertemuan-1%20s%2Fd%2010-2ea44f?style=for-the-badge)
 ![Kelas](https://img.shields.io/badge/Kelas-A-0A66C2?style=for-the-badge)
 
 | | |
@@ -42,6 +42,8 @@ flowchart LR
     style E fill:#e0f7fa,stroke:#00838F,color:#000
     style F fill:#fce4ec,stroke:#C62828,color:#000
     style G fill:#ede7f6,stroke:#4527A0,color:#000
+    G --> H["🛡️ P10<br/>Exception Handling"]
+    style H fill:#fbe9e7,stroke:#BF360C,color:#000
 ```
 
 | # | Topik | Studi Kasus | Kata Kunci | Laporan |
@@ -55,77 +57,70 @@ flowchart LR
 | 7 | 📐 **Pemodelan relasi objek dan UML Class Diagram** | Sistem Perpustakaan | komposisi, agregasi, asosiasi, dependensi, multiplicity | [📄 Buka](Pert%207/README.md) |
 | ~~8~~ | ~~UTS~~ | — | — | — |
 | 9 | 🔗 **UML Class Diagram, Komposisi, dan Agregasi** | Sistem Perpustakaan (`model/`, `service/`) | `package`, komposisi, agregasi, `List.copyOf`, layanan | [📄 Buka](Pert%209/README.md) |
+| 10 | 🛡️ **Exception Handling dan Pemrograman Defensif** | Sistem Perpustakaan (`LibraryService`) | hierarki exception, guard clause, try-with-resources, logging | [📄 Buka](Pert%2010/README.md) |
 
 ---
 
-## 🔗 Sorotan Terbaru: Pertemuan 9
+## 🔗 Sorotan Terbaru: Pertemuan 10
 
-> **Derajat keterikatan antarobjek harus diputuskan sebelum menulis kode, lalu dibuktikan di kode, bukan hanya di gambar.** Uji sederhana: *"Kalau induknya dihapus, apakah bagian ini masih masuk akal?"*
+> **Exception yang baik bukan sekadar teks — ia adalah objek dengan data.** Guard clause mengubah bersarang empat tingkat menjadi baris-baris datar yang langsung menjelaskan mengapa sebuah operasi gagal.
 
 ```mermaid
 classDiagram
-    class Koleksi {
+    class PerpustakaanException {
         <<abstract>>
-        +nomorInduk: String
-        +judul: String
-        +masaPinjamHari() int
-        +bolehDipinjam() bool
-        +tersedia() bool
+        +PerpustakaanException(pesan)
+        +PerpustakaanException(pesan, penyebab)
     }
-    class Buku {
-        +tambahBab(nomor, judul)
-        +getBab() List~Bab~
+    class BukuTidakDitemukanException {
+        -isbn: String
+        +getIsbn() String
     }
-    class Bab {
-        -nomor: int
+    class AnggotaTidakDitemukanException {
+        -idAnggota: String
+        +getIdAnggota() String
+    }
+    class BukuSedangDipinjamException {
+        -isbn: String
         -judul: String
+        +getIsbn() String
+        +getJudul() String
     }
-    class Anggota {
-        +catatPeminjaman(koleksi, tanggal) Peminjaman
-        +getRiwayat() List~Peminjaman~
+    class BatasPinjamTerlampauiException {
+        -idAnggota: String
+        -batas: int
+        +getIdAnggota() String
+        +getBatas() int
     }
-    class Peminjaman {
-        +hariTerlambat() long
-        +hitungDenda() long
-    }
-    class PerpustakaanService {
-        +tambahKoleksi(k)
-        +daftarkanAnggota(a)
-        +pinjam(nomorAnggota, nomorInduk) Peminjaman
-        +kembalikan(nomorAnggota, nomorInduk) Peminjaman
-    }
-    Koleksi <|-- Buku
-    Koleksi <|-- Majalah
-    Koleksi <|-- Skripsi
-    Buku *-- Bab
-    Anggota *-- Peminjaman
-    PerpustakaanService o-- Koleksi
-    PerpustakaanService o-- Anggota
-    Peminjaman --> Koleksi
-    Peminjaman --> Anggota
+    PerpustakaanException <|-- BukuTidakDitemukanException
+    PerpustakaanException <|-- AnggotaTidakDitemukanException
+    PerpustakaanException <|-- BukuSedangDipinjamException
+    PerpustakaanException <|-- BatasPinjamTerlampauiException
 ```
 
-| Relasi | Jenis | Multiplicity | Alasan singkat |
-|---|---|---|---|
-| `Buku` — `Bab` | **Komposisi** `*--` | 1 ke 0..* | Bab tidak bermakna di luar bukunya; constructor `Bab` privat |
-| `Anggota` — `Peminjaman` | **Komposisi** `*--` | 1 ke 0..* | Peminjaman lahir di dalam `Anggota.catatPeminjaman()` |
-| `PerpustakaanService` — `Koleksi`, `Anggota` | **Agregasi** `o--` | 1 ke 0..* | Dibuat di luar, tetap hidup bila layanan dibubarkan |
-| `Peminjaman` — `Koleksi`, `Anggota` | **Asosiasi** `-->` | * ke 1 | Hanya menyimpan rujukan |
+| Teknik | Sebelum (LibraryServiceKotor) | Sesudah (LibraryService) |
+|---|---|---|
+| Nilai kembali | `boolean` — pemanggil tidak tahu mengapa gagal | `void` — exception membawa alasan |
+| Struktur | Bersarang 4 tingkat | Guard clause datar |
+| Penutupan resource | Manual / tidak ada | `try-with-resources` (Java), `try-finally` (PHP) |
+| Jejak kegagalan | Tidak ada | Dicatat ke file log dengan timestamp |
 
 <details>
-<summary><b>✨ Yang dikerjakan di pertemuan 9 (klik untuk membuka)</b></summary>
+<summary><b>✨ Yang dikerjakan di pertemuan 10 (klik untuk membuka)</b></summary>
 
 <br>
 
 | Bagian | Isi |
 |---|---|
-| ☕ **Java** `package model` | `StatusKoleksi`, `Koleksi`, `Buku`, `Majalah`, `Skripsi`, `JenisKeanggotaan`, `KeanggotaanMahasiswa`, `KeanggotaanDosen`, `KeanggotaanKehormatan`, `Anggota`, `Peminjaman`, `Jurusan` |
-| ☕ **Java** `package service` | `PerpustakaanService` |
-| ☕ **Java** | `Main.java`: demo komposisi, agregasi, peminjaman, penolakan aturan, denda |
-| 🐘 **PHP** | `relasi.php` + `main.php`: komposisi `Buku`–`Bab` dan agregasi `Jurusan`–`Mahasiswa` |
-| 📐 **UML** | `uml/perpustakaan.puml`: class diagram lengkap dengan multiplicity |
-| 📝 **Analisis** | [analisis.md](Pert%209/analisis.md): kata benda, kata kerja, aturan bisnis, keputusan relasi |
-| 🔍 **Bukti** | [bukti-relasi.md](Pert%209/bukti-relasi.md): percobaan `getBab().clear()` ditolak, bukti komposisi vs agregasi |
+| ☕ **Java** `exception/` | `PerpustakaanException`, `BukuTidakDitemukanException`, `AnggotaTidakDitemukanException`, `BukuSedangDipinjamException`, `BatasPinjamTerlampauiException` |
+| ☕ **Java** | `LibraryServiceKotor.java`: bahan refaktor (bersarang 4 tingkat, return false) |
+| ☕ **Java** | `LibraryService.java`: guard clause, exception khusus, try-with-resources, logging |
+| ☕ **Java** | `Main.java`: demo otomatis 7 skenario, mode interaktif, ekspor file |
+| 🐘 **PHP** | `exceptions.php`: hierarki lengkap dengan constructor property promotion |
+| 🐘 **PHP** | `LibraryServiceKotor.php`: bahan refaktor PHP |
+| 🐘 **PHP** | `LibraryService.php`: guard clause PHP, try-finally |
+| 🐘 **PHP** | `main.php`: demo PHP sejajar dengan Java |
+| 📝 **Skenario** | [skenario-uji.md](Pert%2010/skenario-uji.md): 13 skenario lengkap + 3 jawaban pertanyaan |
 
 </details>
 
@@ -150,6 +145,8 @@ classDiagram
 │   (Pert 8 = UTS, tidak ada praktikum)
 └── 📁 Pert 9/   ☕ java/model/  ☕ java/service/  🐘 php/  📐 uml/  🖼️ IMG/  🌱 starter/
                  📝 analisis.md  📝 bukti-relasi.md  📝 deskripsi-kebutuhan.md  📄 README.md
+└── 📁 Pert 10/  ☕ java/exception/  ☕ java/  🐘 php/  🌱 starter/
+                 📝 skenario-uji.md  📄 README.md
 ```
 
 ---
@@ -184,6 +181,13 @@ javac -d out Main.java model\*.java service\*.java
 java -cp out Main
 ```
 
+**Pertemuan 10** (dengan package exception):
+```cmd
+cd "Pert 10\java"
+javac -d out exception\*.java LibraryServiceKotor.java LibraryService.java Main.java
+java -cp out Main
+```
+
 </td>
 <td width="50%" valign="top">
 
@@ -206,6 +210,12 @@ php main.php
 **Pertemuan 9:**
 ```cmd
 cd "Pert 9\php"
+php main.php
+```
+
+**Pertemuan 10:**
+```cmd
+cd "Pert 10\php"
 php main.php
 ```
 
